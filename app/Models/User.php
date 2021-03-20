@@ -38,4 +38,9 @@ class User extends Authenticatable
         $user = new User($user->asArray());
         $user->save();
     }
+
+    public function findForPassport($username)
+    {
+        return $this->where('username', $username)->first();
+    }
 }
