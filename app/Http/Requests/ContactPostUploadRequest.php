@@ -28,7 +28,7 @@ class ContactPostUploadRequest extends FormRequest
                 'required',
                 'file',
                 'mimes:csv,txt',
-                'max:100000'
+                'max:1000'
             ]
         ];
     }
