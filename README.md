@@ -1,62 +1,97 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Requirements
+- Docker
+- Docker Compose
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+# Local Environment set up
+ 1. clone the repository
+    ```shell
+        git clone https://github.com/beltranbot/koombea_test.git
+    ```
+ 2. Create and configure the .env file within the project, this will hold the information for the database connection and other aspects of the application
+ 3. Install dependencies using the composer utility images included
+    ```shell
+        docker build -t composer ./docker/composer/Dockerfile
+        docker run composer install
+    ```
+ 4. With the dependencies installed you can build the application images using [Laravel Sail](https://laravel.com/docs/8.x/sail), this process can take several minutes the first time it's executed.
+    ```shell
+        sail build
+    ```
+ 5. Once the images have been build, you can start the local application using:
+    ```shell
+        sail up
+    ```
+ 6. You can change the application port (APP_PORT) and database configuration by edition the .env file and editing the docker-compose.yml files.
+ 7. create the application key
+    ```shell
+        sail artisan key:generate
+    ```
+ 8. run the migrations
+    ```shell
+        sail artisan migrate
+    ```
+ 9. run the seeder
+    ```shell
+        sail artisan db:seed --class=ContactFileStatusSeeder
+    ```
+ 10. Create a passport password client, the client_id and client_secret will be used to communicate with the application
+    ```shell
+        sail artisan passport:client --password
+    ```
+ 9. After you are ready to go, you can find a test file in the test_file/ folder
 
-## About Laravel
+# Available endpoints
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Create user POST /api/users
+ - Creates a user with an username and password.
+ ```json
+{
+    "username": "admin",
+    "password": "password"
+}
+ ```
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Login user POST /oauth/token
+ - checks the user credentials and returns a valid token that can used with authenticated endpoints
+```json
+ {
+    "grant_type": "password",
+    "client_id": "1", // your client_id
+    "client_secret": "<client_secret>", // your client_secret
+    "username": "admin", // user_id you which to login as
+    "password": "password" // password of the user
+}
+```
+ - a valid answer looks as follows
+```json
+{
+    "token_type": "Bearer",
+    "expires_in": 31535999,
+    "access_token": "<bearer_token>",
+    "refresh_token": "<refresh_token>"
+}
+```
+ - to user the authenticated endpoints, on your request you have to set the Authentication header with the contect "Bearer <access_token>"
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### upload contacts file POST /api/contacts/upload
+ - this endpoint requires authentication
+ - uploads a csv file for later processing
+ - postman request example:
+```bash
+curl --location --request POST 'localhost:80/api/contacts/upload' \
+--header 'Authorization: Bearer <access_token>' \
+--form 'file=@"<path/to/the/file>"'
+```
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-## Laravel Sponsors
-
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/)**
-- **[OP.GG](https://op.gg)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### list contact files GET /api/contacts/files
+ - this endpoint requires authentication
+ - list of all contact files that have been uploaded by the authenticated user pagintated by 10 elements
+```
+    localhost/api/contacts/files
+```
+### list contact file errors GET /api/contacts/files/{contact_file_id}/errors
+ - this endpoint requires authentication
+ - list of all the errors assocciated with a given contact file, paginated by 10 elements. Only the user that uploaded the file can see the related errors.
+```
+    localhost/api/contacts/files/{contact_file_id}/errors
+```
