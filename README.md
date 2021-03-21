@@ -35,7 +35,7 @@
         sail artisan db:seed --class=ContactFileStatusSeeder
     ```
  10. Create a passport password client, the client_id and client_secret will be used to communicate with the application
-    ```shell
+    ```
         sail artisan passport:client --password
     ```
  9. After you are ready to go, you can find a test file in the test_file/ folder
