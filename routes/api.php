@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -18,4 +19,12 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::resource('users', UserController::class)->only(['store']);
+Route::resource('users', UserController::class)->only(['store', 'index']);
+Route::middleware('auth:api')->prefix('contacts')->group(function () {
+    Route::post('upload', [ContactController::class, 'upload']);
+    Route::prefix('files')->group(function () {
+        Route::get('/', [ContactController::class, 'files']);
+        Route::get('/{contact_file_id}/errors', [ContactController::class, 'errors']);
+    });
+    
+});
