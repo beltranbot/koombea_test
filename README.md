@@ -7,11 +7,11 @@
     ```shell
         git clone https://github.com/beltranbot/koombea_test.git
     ```
- 2. Create and configure the .env file within the project, this will hold the information for the database connection and other aspects of the application
+ 2. Create and configure the .env file within the project, this will hold the information for the database connection and other aspects of the application. DB_HOST for mac is host.docker.internal.
  3. Install dependencies using the composer utility images included
     ```shell
         docker build -t composer ./docker/composer/Dockerfile
-        docker run composer install
+        docker run -it -v $(PWD):/app composer install
     ```
  4. With the dependencies installed you can build the application images using [Laravel Sail](https://laravel.com/docs/8.x/sail), this process can take several minutes the first time it's executed.
     ```shell

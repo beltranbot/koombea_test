@@ -49,6 +49,9 @@ class CreditCardFactory
 
     public static function getBrand($number)
     {
+        if (!self::areAllNumbers($number)) {
+            return false;
+        }
         foreach (static::$rules as $brand => $brandRules) {
             foreach ($brandRules as $rule) {
                 foreach ($rule['length'] as $length) {
@@ -65,6 +68,17 @@ class CreditCardFactory
             }
         }
         return false;
+    }
+
+    private static function areAllNumbers($number)
+    {
+        $numbers = str_split($number);
+        foreach ($numbers as $item) {
+            if (!is_numeric($item)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private static function checkLength($number, $length)
