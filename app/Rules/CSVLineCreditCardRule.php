@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Utils\CreditCard\validators\CreditCardNumberValidator;
 use App\Utils\CreditCardFactory;
 use Illuminate\Contracts\Validation\Rule;
 
@@ -26,8 +27,10 @@ class CSVLineCreditCardRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        $brand = CreditCardFactory::getBrand($value);
-        return $brand !== false;
+        // $brand = CreditCardFactory::getBrand($value);
+        $creditCardNumberValidator = new CreditCardNumberValidator($number);
+        $creditCardNumberValidator->isValid();
+        // return $brand !== false;
     }
 
     /**
