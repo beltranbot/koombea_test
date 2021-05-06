@@ -2,8 +2,6 @@
 
 namespace App\Utils\CreditCard\validators;
 
-use App\Utils\CreditCard\Validators\DiscoveryCardValidator;
-
 class CreditCardNumberValidator
 {
     private $creditCardValidators = [];
@@ -48,7 +46,7 @@ class CreditCardNumberValidator
         $this->creditCardValidators = [
             AmericanExpressValidator::class,
             DinersClubValidator::class,
-            DiscoveryCardValidator::class,
+            DiscoverCardValidator::class,
             JCBValidator::class,
             MasterCardValidator::class,
             VisaValidator::class

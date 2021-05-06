@@ -2,10 +2,10 @@
 
 namespace App\tests\Unit\Utils\CreditCard\validators;
 
-use App\Utils\CreditCard\validators\DiscoveryCardValidator;
+use App\Utils\CreditCard\validators\DiscoverCardValidator;
 use PHPUnit\Framework\TestCase;
 
-class DiscoveryCardValidatorTest extends TestCase
+class DiscoverCardValidatorTest extends TestCase
 {
     /** @test */
     public function discovery_card_6011_16_to_19_card_number_should_return_discovery_card()
@@ -17,7 +17,7 @@ class DiscoveryCardValidatorTest extends TestCase
             "6011345678910111213", // 19
         ];
         foreach ($numbers as $number) {
-            $validator = new DiscoveryCardValidator($number);
+            $validator = new DiscoverCardValidator($number);
             $this->assertTrue($validator->isValid());
             $this->assertEquals("Discover Card", $validator->getBrand());
         }
@@ -35,7 +35,7 @@ class DiscoveryCardValidatorTest extends TestCase
         for ($i = 622126; $i <= 622925; $i++) {
             foreach ($number_tails as $number_tail) {
                 $number = "$i" . $number_tail;
-                $validator = new DiscoveryCardValidator($number);
+                $validator = new DiscoverCardValidator($number);
                 $this->assertTrue($validator->isValid());
                 $this->assertEquals("Discover Card", $validator->getBrand());
             }
@@ -57,7 +57,7 @@ class DiscoveryCardValidatorTest extends TestCase
         foreach ($number_heads as $number_head) {
             foreach ($number_tails as $number_tail) {
                 $number = $number_head . $number_tail;
-                $validator = new DiscoveryCardValidator($number);
+                $validator = new DiscoverCardValidator($number);
                 $this->assertTrue($validator->isValid());
                 $this->assertEquals("Discover Card", $validator->getBrand());
             }
@@ -75,7 +75,7 @@ class DiscoveryCardValidatorTest extends TestCase
         ];
         foreach ($number_tails as $number_tail) {
             $number = "65$number_tail";
-            $validator = new DiscoveryCardValidator($number);
+            $validator = new DiscoverCardValidator($number);
             $this->assertTrue($validator->isValid());
             $this->assertEquals("Discover Card", $validator->getBrand());
         }

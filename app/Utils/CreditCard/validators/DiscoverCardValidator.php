@@ -4,7 +4,7 @@ namespace App\Utils\CreditCard\validators;
 
 use App\Utils\CreditCard\validators\CreditCardValidatorAbstract;
 
-class DiscoveryCardValidator extends CreditCardValidatorAbstract
+class DiscoverCardValidator extends CreditCardValidatorAbstract
 {
     protected $brandName = "Discover Card";
     protected $rules = [
