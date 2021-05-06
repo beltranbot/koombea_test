@@ -25,7 +25,7 @@ class CSVLineNameRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        return preg_match("/^[a-zA-Z\-]{1}[a-zA-Z\-\s]*$/", $value);
+        return boolval(preg_match("/^[a-zA-Z\-]{1}[a-zA-Z\-\s]*$/", $value));
     }
 
     /**

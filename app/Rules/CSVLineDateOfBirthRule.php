@@ -33,7 +33,7 @@ class CSVLineDateOfBirthRule implements Rule
         return $check1 || $check2;
     }
 
-    private static function checkFormat($format, $time, $dateInput)
+    private function checkFormat($format, $time, $dateInput)
     {
         $testDate = date($format, $time);
         return $dateInput == $testDate;
