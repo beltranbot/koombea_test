@@ -13,10 +13,10 @@ abstract class CreditCardValidatorAbstract
 
     public function __construct(string $number)
     {
-        if (!isset($brandName)) {
+        if (!isset($this->brandName)) {
             throw new NoBrandNameException();
         }
-        if (!isset($rules)) {
+        if (!isset($this->rules)) {
             throw new NoRulesException();
         }
         $this->number = $number;
@@ -38,7 +38,7 @@ abstract class CreditCardValidatorAbstract
         return $this->brandName;
     }
 
-    protected function processNumber()
+    private function processNumber()
     {
         if (!$this->areAllNumbers()) {
             return false;
@@ -46,14 +46,14 @@ abstract class CreditCardValidatorAbstract
         return $this->processRules();
     }
 
-    protected function processRules()
+    private function processRules()
     {
         foreach ($this->rules as $rule) {
             foreach ($rule["length"] as $length) {
                 if (!$this->checkLength($this->number, $length)) {
                     continue;
                 }
-                foreach ($rule['inn_ranges'] as $range) {
+                foreach ($rule["inn_ranges"] as $range) {
                     if (!$this->checkInnRange($this->number, $range)) {
                         continue;
                     }
@@ -64,7 +64,7 @@ abstract class CreditCardValidatorAbstract
         return false;
     }
 
-    protected function areAllNumbers()
+    private function areAllNumbers()
     {
         $numbers = str_split($this->number);
         foreach ($numbers as $item) {
@@ -75,21 +75,21 @@ abstract class CreditCardValidatorAbstract
         return true;
     }
 
-    protected function checkLength($number, $length)
+    private function checkLength($number, $length)
     {
         if (is_numeric($length)) {
             return strlen($number) === intval($length);
         }
-        $arr = explode('-' , $length);
+        $arr = explode("-" , $length);
         return strlen($number) >= intval($arr[0]) && strlen($number) <= intval($arr[1]);
     }
 
-    protected function checkInnRange($number, $range)
+    private function checkInnRange($number, $range)
     {
         if (is_numeric($range)) {
             return str_starts_with($number, $range);
         }
-        $arr = explode('-' , $range);
+        $arr = explode("-" , $range);
         $strStart = substr($number, 0, strlen($arr[0]));
         return intval($strStart) >= intval($arr[0]) && intval($strStart) <= intval($arr[1]);
     }

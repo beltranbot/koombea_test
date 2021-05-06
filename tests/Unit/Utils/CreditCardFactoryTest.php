@@ -149,7 +149,7 @@ class CreditCardFactoryTest extends TestCase
             "34567891011121", // 18
             "345678910111213", // 19
         ];
-        for ($i = 3528; $i <= 3589; $i ++) { 
+        for ($i = 3528; $i <= 3589; $i++) {
             foreach ($number_tails as $number_tail) {
                 $number = "$i$number_tail";
                 $this->assertEquals(
@@ -164,7 +164,7 @@ class CreditCardFactoryTest extends TestCase
     public function master_card_2221_2720_15_card_number_should_return_master_card()
     {
         $number_tail = "45678910111"; // 15
-        for ($i = 2221; $i <= 2720; $i ++) { 
+        for ($i = 2221; $i <= 2720; $i++) {
             $number = "$i$number_tail";
             $this->assertEquals(
                 CreditCardFactory::getBrand($number),
@@ -177,7 +177,7 @@ class CreditCardFactoryTest extends TestCase
     public function master_card_51_to_55_15_card_number_should_return_master_card()
     {
         $number_tail = "2345678910111"; // 15
-        for ($i = 51; $i <= 55; $i ++) { 
+        for ($i = 51; $i <= 55; $i++) {
             $number = "$i$number_tail";
             $this->assertEquals(
                 CreditCardFactory::getBrand($number),
@@ -200,5 +200,4 @@ class CreditCardFactoryTest extends TestCase
             );
         }
     }
-
 }
