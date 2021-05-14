@@ -62,7 +62,8 @@
         "post-install-cmd": [ 
             "php artisan clear-compiled",
             "chmod -R 774 storage/*", 
-            "php artisan passport:keys"
+            "php artisan passport:keys",
+            "chown -R $USER:dyno storage"
         ]
     }
 }
