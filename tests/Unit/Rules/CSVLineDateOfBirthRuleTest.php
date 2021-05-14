@@ -27,7 +27,7 @@ class CSVLineDateOfBirthRuleTest extends TestCase
     public function valid_date_without_dashes_should_return_true()
     {
         $rule = new CSVLineDateOfBirthRule();
-        $date = "2021-02-26";
+        $date = "20210226";
         $this->assertTrue($rule->passes("dob", $date));
     }
 }
