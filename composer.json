@@ -61,7 +61,7 @@
         ],
         "post-install-cmd": [ 
             "php artisan clear-compiled",
-            "chmod -R 770 storage", 
+            "chmod -R 774 storage/*", 
             "php artisan passport:keys"
         ]
     }
