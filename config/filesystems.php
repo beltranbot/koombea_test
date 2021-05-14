@@ -33,6 +33,16 @@ return [
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
+            'permissions' => [
+                'file' => [
+                    'public' => 0777,
+                    'private' => 0660,
+                ],
+                'dir' => [
+                    'public' => 0777,
+                    'private' => 0760,
+                ],
+            ]
         ],
 
         'public' => [
