@@ -59,12 +59,6 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ],
-        "post-install-cmd": [ 
-            "php artisan clear-compiled",
-            "chmod -R 774 storage/*", 
-            "php artisan passport:keys",
-            "chown -R $USER:dyno storage"
         ]
     }
 }
