@@ -15,7 +15,7 @@ use App\Services\ContactFileErrorService;
 use App\Services\ContactFileErrorServiceInterface;
 use App\Services\ContactService;
 use App\Services\ContactServiceInterface;
-use App\Services\LocalStorageService;
+use App\Services\S3StorageService;
 use App\Services\UserService;
 use App\Services\UserServiceInterface;
 use Illuminate\Support\ServiceProvider;
@@ -34,7 +34,7 @@ class AppServiceProvider extends ServiceProvider
         });
         $this->app->bind(ContactServiceInterface::class, function ($app) {
             return new ContactService(
-                new LocalStorageService('local', 'contact_files/'),
+                new S3StorageService("s3", "contact_files/"),
                 new ContactFileRepository(new ContactFile()),
                 new ContactRepository(new Contact())
             );

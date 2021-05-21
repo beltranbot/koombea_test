@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use Exception;
+
 abstract class StorageServiceAbstract implements StorageServiceInterface
 {
     protected $disk;
@@ -15,5 +17,12 @@ abstract class StorageServiceAbstract implements StorageServiceInterface
     protected function setPath($path)
     {
         $this->path = $path;
+    }
+
+    protected function isPathSet()
+    {
+        if (is_null($this->path)) {
+            new Exception("Path must be set for the storage.");
+        }
     }
 }

@@ -16,18 +16,18 @@ use Illuminate\Support\Facades\Auth;
 class ContactService implements ContactServiceInterface
 {
     public function __construct(
-        StorageServiceInterface $localStorageService,
+        StorageServiceInterface $storageService,
         ContactFileRepositoryInterface $contactFileRepository,
         ContactRepositoryInterface $contactRepository
     ) {
-        $this->localStorageService = $localStorageService;
+        $this->storageService = $storageService;
         $this->contactFileRepository = $contactFileRepository;
         $this->contactRepository = $contactRepository;
     }
 
     public function registerContactFileToQueue(ContactFile $contactFile): Response
     {
-        $fileLocation = $this->localStorageService->storeFile($contactFile);
+        $fileLocation = $this->storageService->storeFile($contactFile);
         $contactFile = $this->contactFileRepository->register(new ContactFileEntry(
             Auth::id(),
             ContactFileStatus::WAITING,

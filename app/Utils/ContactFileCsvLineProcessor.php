@@ -52,7 +52,7 @@ class ContactFileCsvLineProcessor
     private function setData()
     {
         if ($this->lineCount < count($this->positions)) {
-            throw new Exception("File doesn't have the right amount of columns.");
+            throw new Exception("Line doesn't have the right amount of columns.");
         }
         $this->data = [];
         $this->setOrException('name', $this->positions['name']);

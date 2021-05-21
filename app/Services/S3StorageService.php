@@ -5,7 +5,7 @@ namespace App\Services;
 use App\DTO\ContactFile;
 use Illuminate\Support\Facades\Storage;
 
-class LocalStorageService extends StorageServiceAbstract implements StorageServiceInterface
+class S3StorageService extends StorageServiceAbstract implements StorageServiceInterface
 {
     public function __construct($disk, $path)
     {

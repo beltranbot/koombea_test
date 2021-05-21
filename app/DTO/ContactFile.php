@@ -8,7 +8,7 @@ class ContactFile
 
     public function __construct($request)
     {
-        $this->file = $request->file('file');
+        $this->file = $request->file("file");
     }
 
     public function getFilename()

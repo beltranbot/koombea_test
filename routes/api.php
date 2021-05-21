@@ -26,5 +26,5 @@ Route::middleware('auth:api')->prefix('contacts')->group(function () {
         Route::get('/', [ContactController::class, 'files']);
         Route::get('/{contact_file_id}/errors', [ContactController::class, 'errors']);
     });
-    
+    Route::get('/{contact_file}', [ContactController::class, 'show']);
 });

@@ -45,24 +45,27 @@ class ProcessContactFile implements ShouldQueue
     ) {
         $this->contactService = $contactService;
         $this->contactFileErrorService = $contactFileErrorService;
-        $fileLocation = Storage::path($this->contactFile->location);
-        $this->line = 0;
-        try {
-            $handle = fopen($fileLocation, "r");
-            while ($csvLine = fgetcsv($handle, 1000, ",")) {
-                $this->line++;
-                $this->processLine($csvLine);
+        $file = Storage::disk("s3")->get($this->contactFile->location);
+        $lines = explode("\n", $file);
+        foreach ($lines as $index => $line) {
+            if ($index == 0) {
+                continue;
             }
-        } catch (Exception $e) {
-            $this->contactFileErrorService->registerContactFileError(
-                new ContactFileError(
-                    $this->contactFile->id,
-                    "file",
-                    "Problems reading csv file.",
-                    $this->line,
-                    $e->getMessage()
-                )
-            );
+            $this->index = $index;
+            try {
+                $line = str_getcsv($line, ",");
+                $this->processLine($line);
+            } catch (Exception $e) {
+                $this->contactFileErrorService->registerContactFileError(
+                    new ContactFileError(
+                        $this->contactFile->id,
+                        "file",
+                        "Problems reading line.",
+                        $index,
+                        $e->getMessage()
+                    )
+                );
+            }
         }
     }
 
@@ -73,7 +76,7 @@ class ProcessContactFile implements ShouldQueue
         if (!$validation->fails) {
             $this->handleValidLine($csvProcessor);
         } else {
-            $this->handleInvalidLine($csvProcessor, $validation);
+            $this->handleInvalidLine($validation);
         }
     }
 
@@ -91,7 +94,7 @@ class ProcessContactFile implements ShouldQueue
         ));
     }
 
-    private function handleInvalidLine($csvProcessor, $validation)
+    private function handleInvalidLine($validation)
     {
         $insertBatch = $this->parseInsertBatchData($validation);
         $this->contactFileErrorService->insertBatch($insertBatch);
@@ -106,7 +109,7 @@ class ProcessContactFile implements ShouldQueue
                     $this->contactFile->id,
                     $key,
                     $error,
-                    $this->line,
+                    $this->index,
                     null
                 );
                 $insertBatch[] = $contactFileError->asArray();
