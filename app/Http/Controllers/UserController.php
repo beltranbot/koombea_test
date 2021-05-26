@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\DTO\User;
+use App\DTO\User as UserDTO;
 use App\Http\Requests\UserPostRequest;
+use App\Models\User;
 use App\Services\UserServiceInterface;
 use App\Utils\IndexRequests\UserIndexRequest;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     private $userService;
+
     public function __construct(UserServiceInterface $userService)
     {
         $this->userService = $userService;
@@ -19,7 +21,7 @@ class UserController extends Controller
 
     public function store(UserPostRequest $request)
     {
-        $user = new User($request);
+        $user = new UserDTO($request);
         $response = $this->userService->registerUser($user);
         return response()->json($response->getResponse(), $response->gethttpCode());
     }
@@ -28,6 +30,6 @@ class UserController extends Controller
     {
         $indexRequest = new UserIndexRequest($request);
         $users = $this->userService->getPaginated($indexRequest);
-        return response()->json(["users" => $users], 200);
+        return response()->json($users, 200);
     }
 }
