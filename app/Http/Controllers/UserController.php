@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DTO\User;
 use App\Http\Requests\UserPostRequest;
 use App\Services\UserServiceInterface;
+use App\Utils\IndexRequests\UserIndexRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 
@@ -23,17 +24,10 @@ class UserController extends Controller
         return response()->json($response->getResponse(), $response->gethttpCode());
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $validator = Validator::make([
-            "name" => "carlos"
-        ], [
-            'name' => 'required',
-            'lastname' => 'required',
-        ]);
-        if ($validator->fails()) {
-            $errors = $validator->errors();
-            return response()->json($errors, 200);
-        }
+        $indexRequest = new UserIndexRequest($request);
+        $users = $this->userService->getPaginated($indexRequest);
+        return response()->json(["users" => $users], 200);
     }
 }
