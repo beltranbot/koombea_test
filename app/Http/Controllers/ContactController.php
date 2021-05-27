@@ -6,7 +6,9 @@ use App\DTO\ContactFile;
 use App\Http\Requests\ContactPostUploadRequest;
 use App\Models\ContactFile as ContactFileModel;
 use App\Models\ContactFileError;
+use App\Repositories\ContactRepository;
 use App\Services\ContactServiceInterface;
+use App\Utils\DTOs\ContactIndexDTO;
 use App\Utils\ResponseCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,6 +19,13 @@ class ContactController extends Controller
     public function __construct(ContactServiceInterface $contactService)
     {
         $this->contactService = $contactService;
+    }
+
+    public function index(Request $request)
+    {
+        $contactsIndexDTO = new ContactIndexDTO(Auth::user()->id, $request);
+        $contacts = $this->contactService->getPaginated($contactsIndexDTO);
+        return response()->json($contacts, 200);
     }
 
     public function upload(ContactPostUploadRequest $request)

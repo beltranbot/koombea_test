@@ -9,6 +9,7 @@ use App\DTO\ContactFileStatus;
 use App\Jobs\ProcessContactFile;
 use App\Repositories\ContactFileRepositoryInterface;
 use App\Repositories\ContactRepositoryInterface;
+use App\Utils\DTOs\ContactIndexDTO;
 use App\Utils\Response;
 use App\Utils\ResponseCode;
 use Illuminate\Support\Facades\Auth;
@@ -41,5 +42,10 @@ class ContactService implements ContactServiceInterface
     public function registerContact(Contact $contact)
     {
         $this->contactRepository->registerContact($contact);
+    }
+
+    public function getPaginated(ContactIndexDTO $dto)
+    {
+        return $this->contactRepository->getPaginated($dto);
     }
 }
