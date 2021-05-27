@@ -6,9 +6,10 @@ use App\DTO\ContactFile;
 use App\Http\Requests\ContactPostUploadRequest;
 use App\Models\ContactFile as ContactFileModel;
 use App\Models\ContactFileError;
-use App\Repositories\ContactRepository;
+use App\Services\contactFileService;
 use App\Services\ContactServiceInterface;
 use App\Utils\DTOs\ContactIndexDTO;
+use App\Utils\DTOs\ContactsFilesIndexDTO;
 use App\Utils\ResponseCode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,9 +17,12 @@ use Illuminate\Support\Facades\Storage;
 
 class ContactController extends Controller
 {
-    public function __construct(ContactServiceInterface $contactService)
-    {
+    public function __construct(
+        ContactServiceInterface $contactService,
+        contactFileService $contactFileService
+    ) {
         $this->contactService = $contactService;
+        $this->contactFileService = $contactFileService;
     }
 
     public function index(Request $request)
@@ -38,10 +42,11 @@ class ContactController extends Controller
         );
     }
 
-    public function files()
+    public function files(Request $request)
     {
-        $files = ContactFileModel::where("user_id", Auth::id())->paginate(10);
-        return response()->json($files);
+        $filesIndexDTO = new ContactsFilesIndexDTO(Auth::user()->id, $request);
+        $contactFiles = $this->contactFileService->getPaginated($filesIndexDTO);
+        return response()->json($contactFiles, 200);
     }
 
     public function errors($contact_file_id)
