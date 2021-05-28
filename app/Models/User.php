@@ -33,12 +33,6 @@ class User extends Authenticatable
         'password'
     ];
 
-    public function registerUser(DTOUser $user)
-    {
-        $user = new User($user->asArray());
-        $user->save();
-    }
-
     public function findForPassport($username)
     {
         return $this->where('username', $username)->first();

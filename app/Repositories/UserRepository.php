@@ -8,21 +8,17 @@ use App\Utils\IndexRequests\UserIndexRequest;
 
 class UserRepository implements UserRepositoryInterface
 {
-    private $userModel;
 
-    public function __construct(UserModel $userModel)
+    public function register(User $user) : UserModel
     {
-        $this->userModel = $userModel;
-    }
-
-    public function registerUser(User $user) : void
-    {
-        $this->userModel->registerUser($user);
+        $user = new UserModel($user->asArray());
+        $user->save();
+        return $user;
     }
 
     public function getPaginated(UserIndexRequest $request)
     {
-        $users = UserModel::paginate($request->getPage());
+        $users = UserModel::paginate($request->getPerPage());
         return $users;
     }
 }

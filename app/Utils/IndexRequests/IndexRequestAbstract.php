@@ -5,12 +5,24 @@ namespace App\Utils\IndexRequests;
 abstract class IndexRequestAbstract
 {
     private $page = 0;
+    private $perPage = 10;
     private $request;
 
     public function __construct($request)
     {
         $this->request = $request;
         $this->setPage();
+        $this->setPerPage();
+    }
+
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    public function getPerPage()
+    {
+        return $this->perPage;
     }
 
     private function setPage()
@@ -20,8 +32,10 @@ abstract class IndexRequestAbstract
         }
     }
 
-    public function getPage()
+    private function setPerPage()
     {
-        return $this->page;
+        if ($this->request->has("per_page")) {
+            $this->perPage = is_numeric($this->request->per_page) ? intval($this->request->per_page) : 10;
+        }
     }
 }
