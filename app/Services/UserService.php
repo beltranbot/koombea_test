@@ -19,7 +19,7 @@ class UserService implements UserServiceInterface
 
     public function registerUser(User $user) : Response
     {
-        $this->userRepository->registerUser($user);
+        $this->userRepository->register($user);
         return new Response([
             "message" => "Users was created successfully",
         ], ResponseCode::OK);

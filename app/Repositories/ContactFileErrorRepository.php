@@ -21,4 +21,9 @@ class ContactFileErrorRepository implements ContactFileErrorRepositoryInterface
     {
         $this->contactFileErrorModel->insertBatch($insertBatch);
     }
+
+    public function getByContactFileId($contactFileId)
+    {
+        return ContactFileErrorModel::where("contact_file_id", $contactFileId)->paginate(10);
+    }
 }

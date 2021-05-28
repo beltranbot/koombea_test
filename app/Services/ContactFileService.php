@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Repositories\ContactFileRepository;
 use App\Utils\DTOs\ContactsFilesIndexDTO;
 
-class contactFileService
+class ContactFileService
 {
     public function __construct(ContactFileRepository $contactFileRepository)
     {
