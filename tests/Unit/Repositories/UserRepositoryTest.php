@@ -5,6 +5,7 @@ namespace Tests\Unit\Repositories;
 use App\DTO\User as UserDTO;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\Utils\IndexRequests\UserIndexRequest;
 use Illuminate\Support\Facades\Hash;
 use Tests\TestCase;
 
@@ -29,6 +30,16 @@ class UserRepositoryTest extends TestCase
     /** @test */
     public function should_get_users_paginated()
     {
-        $this->assertTrue(false);
+        User::factory()->count(15)->create();
+        $repository = new UserRepository();
+        $request = new UserIndexRequest(new class {
+            public function has($field) { return false; }
+        });
+        $users = $repository->getPaginated($request);
+        $this->assertEquals(15, $users->total());
+        $this->assertEquals(10, $users->perPage());
+        $this->assertEquals(2, $users->lastPage());
+        $this->assertEquals(2, $users->lastPage());
+        $this->assertEquals(1, $users->currentPage());
     }
 }
