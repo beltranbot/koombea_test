@@ -22,6 +22,9 @@ class Contact extends Model
         'brand',
         'email',
     ];
+    protected $hidden = [
+        "cc_number"
+    ];
 
     public function registerContact(DTOContact $dtoContact)
     {

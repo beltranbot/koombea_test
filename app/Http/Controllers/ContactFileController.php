@@ -9,7 +9,6 @@ use App\Utils\DTOs\ContactsFilesIndexDTO;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ContactFile as ContactFileModel;
-use App\Services\ContactService;
 use App\Services\ContactServiceInterface;
 use App\Utils\ResponseCode;
 use Illuminate\Support\Facades\Storage;
@@ -54,8 +53,6 @@ class ContactFileController extends Controller
 
     public function show(ContactFileModel $contactFile)
     {
-        $file = Storage::disk("s3")->get($contactFile->location);
-        $file = explode("\n", $file);
-        return $file[1];
+        return Storage::disk("s3")->get($contactFile->location);
     }
 }

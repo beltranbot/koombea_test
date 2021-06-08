@@ -24,6 +24,7 @@ Route::resource("users", UserController::class)->only(["store", "index"]);
 Route::middleware("auth:api")->group(function () {
     Route::prefix("contacts")->group(function () {
         Route::get("/", [ContactController::class, "index"]);
+        Route::get("/{contact}", [ContactController::class, "show"]);
     });
 
     Route::prefix("files")->group(function () {

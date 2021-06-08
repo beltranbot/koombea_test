@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Contact;
 use App\Repositories\ContactFileErrorRepository;
 use App\Services\contactFileService;
 use App\Services\ContactServiceInterface;
@@ -26,5 +27,10 @@ class ContactController extends Controller
         $contactsIndexDTO = new ContactIndexDTO(Auth::user()->id, $request);
         $contacts = $this->contactService->getPaginated($contactsIndexDTO);
         return response()->json($contacts, 200);
+    }
+
+    public function show(Contact $contact)
+    {
+        return response()->json($contact, 200);
     }
 }
