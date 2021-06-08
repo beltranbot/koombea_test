@@ -9,6 +9,7 @@ use App\Utils\DTOs\ContactsFilesIndexDTO;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\ContactFile as ContactFileModel;
+use App\Repositories\ContactFileErrorRepository;
 use App\Services\ContactServiceInterface;
 use App\Utils\ResponseCode;
 use Illuminate\Support\Facades\Storage;
@@ -18,10 +19,12 @@ class ContactFileController extends Controller
 
     public function __construct(
         ContactFileService $contactFileService,
-        ContactServiceInterface $contactService
+        ContactServiceInterface $contactService,
+        ContactFileErrorRepository $contactFileErrorRepository
     ) {
         $this->contactFileService = $contactFileService;
         $this->contactService = $contactService;
+        $this->contactFileErrorRepository = $contactFileErrorRepository;
     }
 
     public function index(Request $request)
